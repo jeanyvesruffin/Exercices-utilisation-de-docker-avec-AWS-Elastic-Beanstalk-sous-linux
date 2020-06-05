@@ -41,6 +41,7 @@ export PATH=~/.npm-global/bin:$PATH
 ```cmd
 source ~/.profile
 ```
+
 ## Resource npm
 
 https://lesbricodeurs.fr/articles/Comment-installer-npm-proprement/
