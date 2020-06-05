@@ -8,9 +8,10 @@ https://www.math-linux.com/linux-2/tutoriels-linux/article/installation-de-paque
 
 # npm
 
-    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-    sudo apt install -y nodejs
-
+```cmd
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt install -y nodejs
+```
 
 Installer le global localement
 
@@ -18,27 +19,20 @@ Quand vous installez des paquets via npm, si vous ne précisez rien, ils seront 
 
 * créer un dossier dédié
 
-
-    mkdir ~/.npm-global
-
+mkdir ~/.npm-global
     
 * Configurer npm pour utiliser ce dossier
-
     
-    npm config set prefix '~/.npm-global'
-
-    
+npm config set prefix '~/.npm-global'
+   
 * Ajouter cette ligne à votre fichier .profile ou .bashrc
-
     
-    export PATH=~/.npm-global/bin:$PATH
-
+export PATH=~/.npm-global/bin:$PATH
 
 * Mettre à jour les variables
 
+source ~/.profile
 
-    source ~/.profile
-    
 
 ## Resource npm
 
