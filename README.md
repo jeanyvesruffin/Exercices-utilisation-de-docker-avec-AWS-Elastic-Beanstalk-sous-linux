@@ -118,7 +118,7 @@ sudo docker network inspect docker_gwbridge
 sudo curl [IPv4Address]
 ```
 
-![swarm](documents/swarm.png)
+![swarm](documents/swarm1.png)
 
 
 
