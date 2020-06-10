@@ -29,13 +29,13 @@ EXPOSE 80
 docker pull ubuntu
 ```
 
-* Build image docker
+* Build image myserver docker
 
 ```cmd
 sudo docker build -t myserver .
 ```
 
-* Execution de l'image docker (A chaque demarrage)
+* Execution du server (A chaque demarrage)
 
 ```cmd
 sudo docker run -d myserver
@@ -57,6 +57,8 @@ cURL (abréviation de client URL request library : « bibliothèque de requêtes
 ```cmd
 sudo curl [IPv4Address]
 ```
+
+**Votre page html s'affiche**
 
 ## Initialisation de swarm manager
 
@@ -101,6 +103,8 @@ sudo docker service ps webserver
 
 #### Dimensionner (scale) le swarm
 
+Exemple de 5 containers répartie sur nos machines
+
 * Repartie sur 5 nodes l'images nginx
 
 ```cmd
@@ -120,21 +124,50 @@ sudo curl [IPv4Address]
 
 ![swarm](documents/swarm1.png)
 
-## Installation de Elstic Beanstalk CLI
+*Attention* a partir de la vous avez 5 services docker en fonctionnement pensez à les stopper:
+
+
+* Supprimer Swarm et les services exposés (aubesoin bien sure)
+
+```cmd
+sudo docker service rm $(docker service ls -q)
+sudo docker stop $(docker ps -a -q)
+sudo docker ps -a
+sudo docker stop $(docker ps -a -q)
+sudo docker swarm leave -f
+sudo docker stop [ID_CONTAINER]
+```
+
+
+
+
+## Installation de Elastic Beanstalk CLI
 
 * Creer un compte sur aws
 * Cliquer sur Elastic Beanstalk
 * Cliquer sur Mon profil > My Security Credentials
 * Cliquer sur Access keys > Create New Access Key 
-* Cliquer sur Show Access Key
+* Cliquer sur Show Access Key et sauvegarde rla dans un bloc note ou coffre-fort
 
 
 * Dans le terminal installer pip.py
 
 ```cmd
 sudo apt update
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+sudo apt-get install python3-dev
+curl -O https://bootstrap.pypa.io/get-pip.py
 sudo python3 get-pip.py --user
+/////////////////////////////////////////////////////////////////////////////////
+//IMPORTANT le PATH /root/.local/bin est indiqué lors de l'execution precedente//
+/////////////////////////////////////////////////////////////////////////////////
+export PATH=$PATH:/root/.local/bin
+sudo python3 get-pip.py --user
+
+```
+* Verification de python3 version
+
+```cmd
+sudo python3 --version
 ```
 
 * Verification de pip version
@@ -143,14 +176,31 @@ sudo python3 get-pip.py --user
 sudo pip --version
 ```
 
-* Installation du client aws Elstic Beanstalk
+* Installation du client aws Elastic Beanstalk
 
 ```cmd
 sudo pip install awsebcli --upgrade --user
 ```
+* Verification de eb version
+
+```cmd
+sudo eb --version
+```
+
+## Elastic Beanstalk toolset
+
+* Command lin eb
+
+```cmd
+sudo eb
+```
+
+* Creation d'une application "fictive" representé par un dossier
 
 
-## Platforms dockers
+```cmd
+sudo mkdir myapp
+```
 
 #### container simple
 
@@ -237,19 +287,65 @@ su - invite1
 
 2. Ecouter les ports (80)
 
+```cmd
 sudo fuser 80/tcp
+```
 
 3. Kill un processus (port 80)
 
+```cmd
 sudo lsof -t -i tcp:80 -s tcp:listen | sudo xargs kill
+```
 
 4. ERROR Linuxlite: la session s'ouvre mais ne s'ouvre pas
 
 * Supprimer le fichier XAuthority (remplacer [user] par le votre)
 
-    sudo rm -f /home/[user]/.Xauthority
-
+```cmd
+sudo rm -f /home/[user]/.Xauthority
+```
 
 * Creer le fichier XAuthority (remplacer [user] par le votre)
 
-    touch /home/[user]/.Xauthority
+```cmd
+touch /home/[user]/.Xauthority
+```
+
+5. Update à la derniere version d'une image
+
+```cmd
+docker pull [image]:latest
+```
+
+6. Connaitre la location du script de notre shell et ajouter/ modifier les variables d'environnements
+
+```cmd
+echo $SHELL
+ls -a ~
+printenv
+```
+
+Si presence de:
+
+* Bash alors modifier script .bash_profile, .profile ou .bash_login. 
+* Zsh alors modifier script .zshrc
+* Tcsh alors modifier script .tcshrc, .cshrc ou .login. 
+
+https://www.tremplin-numerique.org/comment-definir-des-variables-denvironnement-dans-bash-sous-linux
+
+
+7. Editer un fichier de n'importe ou
+
+```cmd
+nano ~/.bash_profile 
+```
+
+# Resources
+
+https://www.ionos.fr/digitalguide/serveur/know-how/docker-orchestration-avec-swarm-et-compose/
+
+https://docs.aws.amazon.com/fr_fr/elasticbeanstalk/latest/dg/eb-cli3-install-linux.html
+
+https://buzut.net/maitriser-les-variables-d-environnement/
+
+https://www.tremplin-numerique.org/comment-definir-des-variables-denvironnement-dans-bash-sous-linux
