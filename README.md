@@ -62,13 +62,13 @@ sudo curl [IPv4Address]
 
 Docker Swarm fournit une fonctionnalité de clustering native pour les conteneurs Docker, qui transforme un groupe de moteurs Docker en un seul moteur Docker virtuel
 
-## Ajouter node
+#### Ajouter node
 
 ```cmd
 sudo docker swarm init
 ```
 
-## Swarm
+#### Swarm
 
 * Pour connaitre les nodes sur ce swarm
 
@@ -78,7 +78,7 @@ sudo docker node ls
 ```cmd
 sudo docker info
 ```
-## Executer un service (exemple de nginx)
+#### Executer un service (exemple de nginx)
 
 * Execution du service nginx
 
@@ -99,7 +99,7 @@ sudo docker service ps webserver
 ```
 
 
-## Dimensionner (scale) le swarm
+#### Dimensionner (scale) le swarm
 
 * Repartie sur 5 nodes l'images nginx
 
@@ -120,7 +120,45 @@ sudo curl [IPv4Address]
 
 ![swarm](documents/swarm1.png)
 
+## Installation de Elstic Beanstalk CLI
 
+* Creer un compte sur aws
+* Cliquer sur Elastic Beanstalk
+* Cliquer sur Mon profil > My Security Credentials
+* Cliquer sur Access keys > Create New Access Key 
+* Cliquer sur Show Access Key
+
+
+* Dans le terminal installer pip.py
+
+```cmd
+sudo apt update
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+sudo python3 get-pip.py --user
+```
+
+* Verification de pip version
+
+```cmd
+sudo pip --version
+```
+
+* Installation du client aws Elstic Beanstalk
+
+```cmd
+sudo pip install awsebcli --upgrade --user
+```
+
+
+## Platforms dockers
+
+#### container simple
+
+#### Container multiple
+
+#### Preconfiguratio
+
+## Dockerrun.aws.json version
 
 
 # apt
@@ -204,3 +242,14 @@ sudo fuser 80/tcp
 3. Kill un processus (port 80)
 
 sudo lsof -t -i tcp:80 -s tcp:listen | sudo xargs kill
+
+4. ERROR Linuxlite: la session s'ouvre mais ne s'ouvre pas
+
+* Supprimer le fichier XAuthority (remplacer [user] par le votre)
+
+    sudo rm -f /home/[user]/.Xauthority
+
+
+* Creer le fichier XAuthority (remplacer [user] par le votre)
+
+    touch /home/[user]/.Xauthority
