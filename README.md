@@ -147,7 +147,7 @@ sudo docker stop [ID_CONTAINER]
 * Cliquer sur Elastic Beanstalk
 * Cliquer sur Mon profil > My Security Credentials
 * Cliquer sur Access keys > Create New Access Key 
-* Cliquer sur Show Access Key et sauvegarde rla dans un bloc note ou coffre-fort
+* Cliquer sur Show Access Key et retene en memoire vos clés (attention de ne pas les diffuser dans un repository git ou autre)
 
 
 * Dans le terminal installer pip.py
@@ -189,7 +189,7 @@ sudo eb --version
 
 ## Elastic Beanstalk toolset
 
-* Command lin eb
+* Command line eb
 
 ```cmd
 sudo eb
@@ -197,10 +197,33 @@ sudo eb
 
 * Creation d'une application "fictive" representé par un dossier
 
-
 ```cmd
 sudo mkdir myapp
 ```
+
+* A partir de la racine de l'application initialiser eb
+
+```cmd
+cd myapp
+eb init
+```
+
+* Indiquer votre region
+* Indiquer vos clés AWS 
+* Indiquer le nom de votre application
+* Indiquer la plateform (ici docker)
+* Indiquer la branch de la plateform
+* Indiquer Yes pour avoir une cle SSH (puis tapper 2-3 fois sur entrer)
+
+* Retourne la liste des eb
+```cmd
+eb list
+```
+* Creation du projet eb
+```cmd
+eb create
+```
+
 
 #### container simple
 
