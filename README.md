@@ -216,16 +216,37 @@ eb init
 * Indiquer Yes pour avoir une cle SSH (puis tapper 2-3 fois sur entrer)
 
 * Retourne la liste des eb
+
 ```cmd
 eb list
 ```
-* Creation du projet eb
+* Creation d'un environnement eb
+
 ```cmd
 eb create
 ```
+* Suppression d'un environnement eb
+
+```cmd
+eb terminate [myapp]
+```
 
 
-#### container simple
+* Besoin de modifier le projet eb
+
+```cmd
+eb init -i
+```
+
+### Docker sur Beanstalk
+
+* Indique la plateforme eb utilisé
+
+```cmd
+eb platform show
+```
+
+
 
 #### Container multiple
 
