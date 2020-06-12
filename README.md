@@ -317,7 +317,10 @@ eb create testenv
 
 Apres avoir cree votre environnement elastic beanstalk vous pouvez constater dans votre console AWS qu'une machine EC2 est alors instancié
 
-![EC2](documents/EC2 Management Console.png)
+
+![EC2](documents/EC2-Management-Console.png)
+
+![eb-cli](documents/eb-cli.png)
 
 3 . Cliquer sur Runnig instance
 
