@@ -311,6 +311,7 @@ RUN apt-get update && \
 2 . Puis creer une instance de aws eb cli
 
 ```cmd
+eb init
 eb create testenv
 ```
 
