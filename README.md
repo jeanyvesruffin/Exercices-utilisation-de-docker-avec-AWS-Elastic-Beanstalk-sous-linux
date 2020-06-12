@@ -35,21 +35,21 @@ docker pull ubuntu
 * Constructure l'image myserver docker
 
 ```cmd
-sudo docker build -t myserver .
+docker build -t myserver .
 ```
 
 * Executer myserver sur le daemon docker
 
 ```cmd
-sudo docker run -d myserver
+docker run -d myserver
 ```
 
 * Verification docker
 
 ```cmd
-sudo docker ps -a
-sudo docker network ls
-sudo docker network inspect bridge
+docker ps -a
+docker network ls
+docker network inspect bridge
 ```
 
 **reperer IPv4Address pour etape suivante**
@@ -59,7 +59,7 @@ sudo docker network inspect bridge
 cURL (abréviation de client URL request library : « bibliothèque de requêtes aux URL pour les clients » ou see URL : « voir URL ») est une interface en ligne de commande, destinée à récupérer le contenu d'une ressource accessible par un réseau informatique. 
 
 ```cmd
-sudo curl [IPv4Address]
+curl [IPv4Address]
 ```
 
 **Votre page html s'affiche**
@@ -71,7 +71,7 @@ Docker Swarm fournit une fonctionnalité de clustering native pour les conteneur
 ![https://docs.docker.com/engine/swarm/ingress/](documents/ingress-routing-mesh.png)
 
 ```cmd
-sudo docker swarm init
+docker swarm init
 ```
 
 #### Swarm
@@ -79,29 +79,29 @@ sudo docker swarm init
 * Pour connaitre les nodes sur ce swarm
 
 ```cmd
-sudo docker node ls
+docker node ls
 ```
 ```cmd
-sudo docker info
+docker info
 ```
 #### Executer un service (exemple de nginx)
 
 * Execution du service nginx
 
 ```cmd
-sudo docker service create -p 80:80 --name webserver nginx
+docker service create -p 80:80 --name webserver nginx
 ```
 
 * Controle du service sur docker
 
 ```cmd
-sudo docker service ls
+docker service ls
 ```
 
 * Voir les informations du container
 
 ```cmd
-sudo docker service ps webserver
+docker service ps webserver
 ```
 
 #### Dimensionner (scale) le swarm
@@ -111,18 +111,18 @@ Exemple de 5 containers répartie sur nos machines
 * Repartie sur 5 nodes l'images nginx
 
 ```cmd
-sudo docker service scale webserver=5
+docker service scale webserver=5
 ```
 
 * Controle
 
 ```cmd
-sudo docker service ps webserver
-sudo docker network ls
+docker service ps webserver
+docker network ls
 //exemple avec docker_gwbridge
-sudo docker network inspect docker_gwbridge
+docker network inspect docker_gwbridge
 // relever [IPv4Address]
-sudo curl [IPv4Address]
+curl [IPv4Address]
 ```
 
 ![swarm](documents/swarm1.png)
@@ -133,12 +133,12 @@ sudo curl [IPv4Address]
 * Supprimer Swarm et les services exposés (aubesoin bien sure)
 
 ```cmd
-sudo docker service rm $(docker service ls -q)
-sudo docker stop $(docker ps -a -q)
-sudo docker ps -a
-sudo docker stop $(docker ps -a -q)
-sudo docker swarm leave -f
-sudo docker stop [ID_CONTAINER]
+docker service rm $(docker service ls -q)
+docker stop $(docker ps -a -q)
+docker ps -a
+docker stop $(docker ps -a -q)
+docker swarm leave -f
+docker stop [ID_CONTAINER]
 ```
 
 ## Installation de Elastic Beanstalk CLI
@@ -154,10 +154,10 @@ sudo docker stop [ID_CONTAINER]
 * Dans le terminal installer pip.py
 
 ```cmd
-sudo apt update
-sudo apt-get install python3-dev
+apt update
+apt-get install python3-dev
 curl -O https://bootstrap.pypa.io/get-pip.py
-sudo python3 get-pip.py --user
+python3 get-pip.py --user
 /////////////////////////////////////////////////////////////////////////////////
 //IMPORTANT le PATH /root/.local/bin est indiqué lors de l'execution precedente//
 /////////////////////////////////////////////////////////////////////////////////
@@ -168,19 +168,19 @@ export PATH=$PATH:/root/.local/bin
 * Verification de python3 version
 
 ```cmd
-sudo python3 --version
+python3 --version
 ```
 
 * Verification de pip version
 
 ```cmd
-sudo pip --version
+pip --version
 ```
 
 * Installation du client aws Elastic Beanstalk
 
 ```cmd
-sudo pip install awsebcli --upgrade --user
+pip install awsebcli --upgrade --user
 ```
 
 * Configurer votre path
@@ -196,13 +196,13 @@ export PATH=$PATH:$HOME/.local/bin
 * Verification de eb version
 
 ```cmd
-sudo eb --version
+eb --version
 ```
 
 * Desinstaller eb avec pip
 
 ```cmd
-sudo pip uninstall awsebcli
+pip uninstall awsebcli
 ```
 
 ### Installation de Elastic Beanstalk CLI version 2. Homebrew bcp mieux
@@ -222,7 +222,7 @@ eb --version
 * Command line eb
 
 ```cmd
-sudo eb
+eb
 ```
 
 * Prerequis
@@ -316,7 +316,7 @@ eb create testenv
 
 Apres avoir cree votre environnement elastic beanstalk vous pouvez constater dans votre console AWS qu'une machine EC2 est alors instancié
 
-![EC2](Documents/EC2 Management Console.png)
+![EC2](documents/EC2 Management Console.png)
 
 3 . Cliquer sur Runnig instance
 
@@ -333,13 +333,13 @@ Rappel pour tous stopper
 * Destruction du client eb (eb list) et docker
 
 ```cmd
-sudo eb terminate [nom app] --all
-sudo docker ps
-sudo docker stop [ID_CONTAINER]
-sudo docker swarm leave -f
+eb terminate [nom app] --all
+docker ps
+docker stop [ID_CONTAINER]
+docker swarm leave -f
 // Pour retirer le bridge
-sudo ip link del docker0
-sudo systemctl stop docker
+ip link del docker0
+systemctl stop docker
 ```
 
 
@@ -365,10 +365,6 @@ Pour visualiser la liste des paquets installés
 ```cmd
 dpkg-query -W
 ```
-
-
-
-
 # homebrew
 
 Pour avoir de l'aide sur les lignes de commmandes brew
@@ -386,8 +382,8 @@ brew list
 # npm
 
 ```cmd
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt install -y nodejs
+curl -sL https://deb.nodesource.com/setup_10.x | -E bash -
+apt install -y nodejs
 ```
 
 Installer le global localement
@@ -422,7 +418,7 @@ source ~/.profile
 * Installation de npm en privilege root
 
 ```cmd
-sudo npm install
+npm install
 ```
 # netstat
 https://www.rekha.com/netstat-cheat-sheet-for-newbies.html
@@ -446,13 +442,13 @@ su - invite1
 2. Ecouter les ports (80)
 
 ```cmd
-sudo fuser 80/tcp
+fuser 80/tcp
 ```
 
 3. Kill un processus (port 80)
 
 ```cmd
-sudo lsof -t -i tcp:80 -s tcp:listen | sudo xargs kill
+lsof -t -i tcp:80 -s tcp:listen | xargs kill
 ```
 
 4. ERROR Linuxlite: la session s'ouvre mais ne s'ouvre pas
@@ -460,7 +456,7 @@ sudo lsof -t -i tcp:80 -s tcp:listen | sudo xargs kill
 * Supprimer le fichier XAuthority (remplacer [user] par le votre)
 
 ```cmd
-sudo rm -f /home/[user]/.Xauthority
+rm -f /home/[user]/.Xauthority
 ```
 
 * Creer le fichier XAuthority (remplacer [user] par le votre)
@@ -529,10 +525,10 @@ systemctl daemon-reload
 )"
 ```
 
-* Install the Homebrew dependencies if you have sudo access
+* Install the Homebrew dependencies if you have access
 
 ```cmd
-sudo apt-get install build-essential
+apt-get install build-essential
 ```
 
 * Configure Homebrew in your /home/linuxlite/.profile by running
