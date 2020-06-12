@@ -2,6 +2,8 @@
 
 # Exercices utilisation de docker avec AWS Elastic Beanstalk
 
+*IMPORTANT FACTURATION AWS: afin de ne pas se faire facturer par AWS il est requis de terminer les instances elastic beanstalk, pour se faire faire: eb terminate --all*
+
 AWS Elastic Beanstalk est un service facile à utiliser pour déployer et faire évoluer des applications et services Web développés avec Java, .NET, PHP, Node.js, Python, Ruby, Go et Docker sur des serveurs familiers tels qu'Apache, Nginx, Passenger et IIS.
 
 Vous pouvez simplement télécharger votre code et Elastic Beanstalk gère automatiquement le déploiement, du provisionnement de capacité, de l'équilibrage de charge, de la mise à l'échelle automatique à la surveillance de l'intégrité des applications. Dans le même temps, vous conservez un contrôle total sur les ressources AWS alimentant votre application et pouvez accéder à tout moment aux ressources sous-jacentes.
@@ -320,8 +322,6 @@ Apres avoir cree votre environnement elastic beanstalk vous pouvez constater dan
 
 ![EC2](documents/EC2-Management-Console.png)
 
-![eb-cli](documents/eb-cli.png)
-
 3 . Cliquer sur Runnig instance
 
 Nous pouvons observer dans l'onglet Description de notre instance EC2:
@@ -346,9 +346,228 @@ ip link del docker0
 systemctl stop docker
 ```
 
+## Dockerrun.aws.json version 1 ( Creation d'un projet Elastic Beanstalk, et execution d'un simple container docker à l'interieur )
+
+1 . Initialisation du projet
+
+```cmd
+mkdir [projet]
+cd [projet]
+eb init
+// Choisir Docker comme platform
+// Editer un fichier index.html a l'aide de nano
+nano index.html
+[Tapper un message d'accueil par exemple]
+// ctrl+x, y, Enter, Enter
+```
+
+2 . Construisez votre fichier de configuration en suivant les instructions de la page : https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/single-container-docker-configuration.html#single-container-docker-configuration.dockerrun:
+
+```cmd
+nano Dockerrun.aws.json
+```
+
+```json
+{
+"AWSEBDockerrunVersion": "1",
+"Image":{
+    "Name": "httpd",
+    "Update": "true"
+    },
+    "Ports": [
+        {
+        "ContainerPort": "80"
+        }
+    ],
+    "Volumes": [
+        {
+            "HostDirectory": "/var/app/current",
+            "ContainerDirectory": "/usr/local/apache2/htdocs"
+        }
+    ],
+    "Logging": "/var/log/myapp"
+}
+```
+3 . Creez votre projet awseb et s'y connecter
+
+```cmd
+eb create [projet]
+// Attendre la fin de l'instanciation
+eb ssh [projet]
+// reponse yes pour se connecter
+// Nous nous retrouverons desormais sur la machine virtuelle AMI
+// [ec2-user@ip-0-0-0-0 ~]$
+cd /var/app/current/
+ls
+// Nous avons de nouveau notre Dockerfile, Dockerrun.aws.json et index.html
+//Controle des fichiers
+cat Dockerfile
+cat Dokerrun.aws.json
+// Sortons
+exit
+// Controler votre deployement
+eb status
+// copier/coller CNAME votre endpoint à votre navigateur pour y consulter votre index.curl [CNAME]
+[Contenu du fichier index.html]
+```
+
+4 . Stopper eb et docker
+
+```cmd
+eb terminate [nom app] --all
+docker ps
+docker stop [ID_CONTAINER]
+docker swarm leave -f
+systemctl stop docker
+```
+
+## Dockerrun.aws.json version 2 ( Creation d'un projet Elastic Beanstalk, et execution de multiple container docker à l'interieur )
 
 
-## Dockerrun.aws.json version
+1 . Initialisation du projet
+
+```cmd
+mkdir [projet]
+cd [projet]
+eb init
+// Choisir Docker comme platform
+// Editer un fichier index.html a l'aide de nano
+nano index.html
+[Tapper un message d'accueil par exemple]
+// ctrl+x, y, Enter, Enter
+```
+
+2 . Construisez votre fichier de configuration en suivant les instructions de la page : https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/single-container-docker-configuration.html#single-container-docker-configuration.dockerrun:
+
+```json
+{
+    "AWSEBDockerrunVersion": "2",
+    "Volumes":[
+        {
+            "name": "php-app",
+            "host": {
+                "sourcePath": "/var/app/current/php-app"
+            }
+        },
+        {
+            "name": "nginx-proxy-conf",
+            "host": {
+                "sourcePath": "/var/app/current/proxy/conf.d"
+            } 
+        }
+    ],
+    "containerDefinitions": [
+        {
+            "name": "php-app",
+            "image": "php:fpm",
+            "environment": [
+                {
+                    "name": "Container",
+                    "value": "PHP"
+                }
+            ],
+            "essential": true,
+            "memory": 128,
+            "mountPoints": [
+                {
+                    "sourceVolume": "php-app",
+                    "containerPath": "/var/www/html",
+                    "readOnly": true
+                }
+            ]
+        },
+        {
+            "name": "nginx-proxy",
+            "image": "nginx",
+            "essential": true,
+            "memory": 128,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                }
+            ],
+            "links": [
+                "php-app"
+            ],
+            "mountPoints":[
+                {
+                    "sourceVolume": "php-app",
+                    "containerPath": "/var/www/html",
+                    "readOnly": true
+                },
+                {
+                    "sourceVolume": "nginx-proxy-conf",
+                    "containerPath": "/etc/nginx/conf.d",
+                    "readOnly": true 
+                },
+                {
+                    "sourceVolume": "awseb-logs-nginx-proxy",
+                    "containerPath": "/var/log/nginx"
+                }
+            ]
+        }
+    ]
+}
+```
+3 . Creez votre projet awseb et s'y connecter
+
+```cmd
+eb create [projet]
+// Attendre la fin de l'instanciation
+eb ssh [projet]
+// reponse yes pour se connecter
+// Nous nous retrouverons desormais sur la machine virtuelle AMI
+// [ec2-user@ip-0-0-0-0 ~]$
+cd /var/app/current/
+ls
+// Nous avons de nouveau notre Dockerfile, Dockerrun.aws.json et index.html
+//Controle des fichiers
+cat Dockerfile
+cat Dokerrun.aws.json
+// Sortons
+exit
+// Controler votre deployement
+eb status
+// copier/coller CNAME votre endpoint à votre navigateur pour y consulter votre index.curl [CNAME]
+[Contenu du fichier index.html]
+```
+
+4 . Stopper eb et docker
+
+```cmd
+eb terminate [nom app] --all
+docker ps
+docker stop [ID_CONTAINER]
+docker swarm leave -f
+systemctl stop docker
+```
+## Integration Elastic Beanstalk et Docker avec nos ressources AWS
+
+**Relancer les etapes precedente et ne pas tenir compte du message d'erreur**
+
+Pour le debug apres avoir executer eb ssh [projet] vous pouvez consulter les log d'erreur avec une commande cat manageAWSE/var/log/eb-activity.log
+
+Dans la console AWS Elastic Beanstalk nous pouvons y consulter et modifier la configuration des instances > [projet] > Configuration > Category Instances.
+
+La configuration de l'instance se trouve dans EC2 > Instances
+
+
+### Elastic load balancer
+
+Load balancer est safe, cad, que ca securité est gere par le groupe de securité AWS.
+
+* Cliquer sur EC2 > Auto Scaling Groups
+
+
+### Auto Scaling group
+
+### IAM
+
+### S3 (simple service de stockage)
+
+### CloudWatch
+
 
 
 # apt
