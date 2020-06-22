@@ -772,6 +772,30 @@ eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 brew install gcc
 ```
 
+10. Configuration du fichier de propriete list
+
+pour les erreurs:
+
+W: Le fichier configuré « nginxfocal/source/Sources » ne sera pas pris en compte car le dépôt « https://nginx.org/packages/mainline/ubuntu focal InRelease » ne dispose pas de la source « nginxfocal » (erreur de saisie dans sources.list ?)
+
+N: Le fichier configuré « nginx/binary-i386/Packages » ne sera pas pris en compte car le dépôt « https://nginx.org/packages/mainline/ubuntu focal InRelease » ne prend pas en charge l'architecture « i386 »
+
+
+* Rechercher le fichier incrimine ici etc/apt/source.list.d/nginx et pgdg.list et modifierr la ligne telquel:
+
+```cmd
+deb [arch=amd64]     SUIVI DU NOM DE REPO
+```
+
+
+
+11. Connaitre la version du noyau Linux
+
+```cmd
+uname -a
+```
+
+
 # Resources
 
 https://www.ionos.fr/digitalguide/serveur/know-how/docker-orchestration-avec-swarm-et-compose/
