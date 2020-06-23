@@ -1,5 +1,38 @@
 # Linux
 
+<!-- TOC -->
+
+- [Linux](#linux)
+- [Exercices utilisation de docker avec AWS Elastic Beanstalk](#exercices-utilisation-de-docker-avec-aws-elastic-beanstalk)
+    - [Introduction](#introduction)
+    - [Initialisation de swarm manager](#initialisation-de-swarm-manager)
+        - [Swarm](#swarm)
+        - [Executer un service (exemple de nginx)](#executer-un-service-exemple-de-nginx)
+        - [Dimensionner (scale) le swarm](#dimensionner-scale-le-swarm)
+    - [Installation de Elastic Beanstalk CLI](#installation-de-elastic-beanstalk-cli)
+        - [Installation de Elastic Beanstalk CLI avec pip](#installation-de-elastic-beanstalk-cli-avec-pip)
+        - [Installation de Elastic Beanstalk CLI version 2. Homebrew bcp mieux](#installation-de-elastic-beanstalk-cli-version-2-homebrew-bcp-mieux)
+    - [Elastic Beanstalk toolset](#elastic-beanstalk-toolset)
+        - [Docker sur Elastic Beanstalk](#docker-sur-elastic-beanstalk)
+        - [Preconfiguration](#preconfiguration)
+    - [Dockerrun.aws.json version 1 ( Creation d'un projet Elastic Beanstalk, et execution d'un simple container docker à l'interieur )](#dockerrunawsjson-version-1--creation-dun-projet-elastic-beanstalk-et-execution-dun-simple-container-docker-à-linterieur-)
+    - [Dockerrun.aws.json version 2 ( Creation d'un projet Elastic Beanstalk, et execution de multiple container docker à l'interieur )](#dockerrunawsjson-version-2--creation-dun-projet-elastic-beanstalk-et-execution-de-multiple-container-docker-à-linterieur-)
+    - [Integration Elastic Beanstalk et Docker avec nos ressources AWS](#integration-elastic-beanstalk-et-docker-avec-nos-ressources-aws)
+        - [Elastic load balancer](#elastic-load-balancer)
+        - [Auto Scaling group](#auto-scaling-group)
+        - [IAM](#iam)
+        - [S3 (simple service de stockage)](#s3-simple-service-de-stockage)
+        - [CloudWatch](#cloudwatch)
+- [apt](#apt)
+- [homebrew](#homebrew)
+- [npm](#npm)
+- [netstat](#netstat)
+- [Bug-fix et tricks](#bug-fix-et-tricks)
+- [Resources](#resources)
+
+<!-- /TOC -->
+
+
 # Exercices utilisation de docker avec AWS Elastic Beanstalk
 
 *IMPORTANT FACTURATION AWS: afin de ne pas se faire facturer par AWS il est requis de terminer les instances elastic beanstalk, pour se faire faire: eb terminate --all*
@@ -76,7 +109,7 @@ Docker Swarm fournit une fonctionnalité de clustering native pour les conteneur
 docker swarm init
 ```
 
-#### Swarm
+### Swarm
 
 * Pour connaitre les nodes sur ce swarm
 
@@ -86,7 +119,7 @@ docker node ls
 ```cmd
 docker info
 ```
-#### Executer un service (exemple de nginx)
+### Executer un service (exemple de nginx)
 
 * Execution du service nginx
 
@@ -106,7 +139,7 @@ docker service ls
 docker service ps webserver
 ```
 
-#### Dimensionner (scale) le swarm
+### Dimensionner (scale) le swarm
 
 Exemple de 5 containers répartie sur nos machines
 
